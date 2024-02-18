@@ -9,9 +9,9 @@ env:
   DEPLOYMENT_MANIFEST_PATH: "kubernetes"
 
 # Retrive below secrets from GitHub Actions Secrets
-#  AZURE_TENANT_ID: "secrets"
-#  AZURE_SUBSCRIPTION_ID: "secrets"
-#  AZURE_CLIENT_ID: "secrets"
+  AZURE_TENANT_ID: "e08b21b0-90db-40c5-af4a-db27704c66a3"
+  AZURE_SUBSCRIPTION_ID: "cadeafd1-46e1-448e-8102-51998bae4eae"
+  AZURE_CLIENT_ID: "6775f81e-7aeb-4d4f-adc9-9c9b1a39fd16"
 #  AZURE_CONTAINER_REGISTRY_PASSWORD: "secrets"
 
 on:
@@ -73,9 +73,9 @@ jobs:
       - name: Azure login
         uses: azure/login@v1.4.6
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ env.AZURE_CLIENT_ID }}
+          tenant-id: ${{ env.AZURE_TENANT_ID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
 
       # Use kubelogin to configure your kubeconfig for Azure auth
       - name: Set up kubelogin for non-interactive login
