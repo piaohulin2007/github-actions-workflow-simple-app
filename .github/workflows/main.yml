@@ -9,15 +9,15 @@ env:
   DEPLOYMENT_MANIFEST_PATH: "kubernetes"
 
 # Retrive below secrets from GitHub Actions Secrets
-  AZURE_TENANT_ID: "e08b21b0-90db-40c5-af4a-db27704c66a3"
-  AZURE_SUBSCRIPTION_ID: "cadeafd1-46e1-448e-8102-51998bae4eae"
-  AZURE_CLIENT_ID: "6775f81e-7aeb-4d4f-adc9-9c9b1a39fd16"
+#  AZURE_TENANT_ID: "secrets"
+#  AZURE_SUBSCRIPTION_ID: "secrets"
+#  AZURE_CLIENT_ID: "secrets"
 #  AZURE_CONTAINER_REGISTRY_PASSWORD: "secrets"
 
 on:
   push:
     branches: [ "master" ]
-  workflow_dispatch: #manually trigger
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -27,10 +27,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Docker Setup Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
         
       - name: Azure Container Registry Login
@@ -66,22 +65,21 @@ jobs:
     
     steps:
       # Checks out the repository this file is in
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       # Logs in with your Azure credentials
       - name: Azure login
-        uses: azure/login@v1.6.1
+        uses: azure/login@v1.4.6
         with:
-          client-id: ${{ env.AZURE_CLIENT_ID }}
-          tenant-id: ${{ env.AZURE_TENANT_ID }}
-          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       # Use kubelogin to configure your kubeconfig for Azure auth
       - name: Set up kubelogin for non-interactive login
         uses: azure/use-kubelogin@v1
-      #  with:
-      #    kubelogin-version: 'v0.0.25'
+        with:
+          kubelogin-version: 'v0.0.25'
 
       # Retrieves your Azure Kubernetes Service cluster's kubeconfig file
       - name: Get K8s context
